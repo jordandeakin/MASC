@@ -27,7 +27,7 @@ This repository contains the model code as well as simulation results and data p
 - HypotehsisTests_Data.mat**: This is a structure array of tables containing the results of the statistical analysis of Hypotheses 1-7 presented in the manuscript. It is the output of runHypothesisTests_Data.
 - **studyData* files**: These files contain the data from the Phone & Hotel choice tasks presented in the manuscript.
 - **./Workspaces**: This contains matlab workspaces containing the fitting results of each of the 10 variants (search rule) of MASC fitted to the the Phone & Hotel datasets.
-- Search Rule Simulations: For each search rule there is a .mat file which contains the significance tests for 1000 simulations (Table 1 in the manuscript). The 7 test fields correspond to the 7 hypotheses. 1 denotes an effect was significant and 0 otherwise. 
+- **Search Rule Simulations**: For each search rule there is a .mat file which contains the significance tests for 1000 simulations (Table 1 in the manuscript). The 7 test fields correspond to the 7 hypotheses. 1 denotes an effect was significant and 0 otherwise. 
 - **./AppendixB_ParameterRecovery**: Parameter recovery analysis scripts and the recovered parameters presented in the manuscript. 
 - **./AppendixC_MultiAlternative**: Contains the results of 1000 simulations of MASC with n = 4, as presented in the manuscript, along with the data (see manuscript for details). 
 - **./AppendixE_AbsoluteThreshold**: Contains the significance tests for 1000 simulations of the absolute threshold variant of MASC. The 7 test fields correspond to the 7 hypotheses. 1 denotes an effect was significant and 0 otherwise. 
