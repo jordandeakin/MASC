@@ -1,10 +1,14 @@
-function [betasNfix,tStats] = Extra_OverallValue()
+function [betasNfix,tStats] = AQE_OverallValue()
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function was used in the 'Accounting for Qualitative Effects in
 % Previous Work' section. It computes the relationship between overall
 % value and predicted RT whilst controlling for value difference using a
 % GLM. It also varies the threshold parameter to test the hypothesis that
 % the relationship between OV and RT is stronger when decisions are made less cautiously.
 % (in MASC's case, higher threshold means less cautious.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 
 %% Setting up figure and settings.
 tiledlayout(1,3)
@@ -47,12 +51,11 @@ for iTest = 1:length(threshToTest)
     end
 
 
-    % This function switches the model call based on if you are using slurm or
-    % not (model is the same)
+    %% Simulate Model
     [~, RT, ~] = switchModelCall(settings,parameters,attValues, nTrials, nSubj, 1);
 
 
-    % Get Betas
+    %% Get Betas
     for s = 1:nSubj
         zVD = (diffValue(:,s)-mean(diffValue(:,s)))./std(diffValue(:,s));
         zOV = (overallValue(:,s)-mean(overallValue(:,s)))./std(overallValue(:,s));
@@ -68,7 +71,7 @@ for iTest = 1:length(threshToTest)
 
 
 
-    % Plot one participant.
+    %% Plot one participant.
     nexttile(iTest)
     % Regression line when controlling for value difference.
     predicted_RT_valContr = glmval(betasNfix(end,:)', [repmat(mean(zVD),200,1), zOV], 'identity');

@@ -1,36 +1,39 @@
-function Extra_TimePressure()
+function AQE_TimePressure()
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function was used in the 'Accounting for Qualitative Effects in
-% Previous Work' section. It simulates how the following change with time
+% Previous Work' section.  It simulates how the following change with time
 % pressure (manipulated through the threshold parameter:
 %%% Payne Index
 %%% Attribute Variance
 %%% Option Variance
 %%% Probability of fixating highest weight attribute
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%%% Presettings for MASC %%%
-n = 2;
-m = 3;
+%% Presettings for MASC %%
+n = 2; % Number of Options
+m = 3; % Number of Attributes
 settings.m = m;
 settings.n = n;
-settings.maxSteps = 100;
-nSubj = 100; nTrials = 200;
+settings.maxSteps = 100; % Maximum timesteps for the model.
+nSubj = 100; nTrials = 200; % 100 simulated participants, 200 trials each.
 matrixOAP = reshape(1:n*m,n,m);
+model = 1; % Which search rule to use. 1 = default myopic search rule. See MASC_Model for details of other search rules.
 
-% Load in existing dataset or create one if it doesn't exist.
-if exist('Extra_TimePressure_Dat.mat','file') == 2
-    f = load('Extra_TimePressure_Dat.mat');
+%% Load in existing dataset for replicability or create one if it doesn't exist.
+if exist('AQE_TimePressure_Dat.mat','file') == 2
+    f = load('AQE_TimePressure_Dat.mat');
     dat = f.dat; parameters = f.parameters;
 else
     [dat,parameters] = MASC_Simulate(nSubj,nTrials,n,m);
-    save('Extra_TimePressure_Dat','dat','parameters');
+    save('AQE_TimePressure_Dat','dat','parameters');
 end
 
-
+%% Get the attribute values and weights.
 attValues = dat.attValues;
 w = dat.attWeights;
 
 
-% Number of thresholds and levels of alpha to test.
+%% Number of threshold parameters and levels of alpha (search sensitivity) to test.
 nThresh = 10;
 nSearch = 5;
 threshToTest = linspace(.001,.2,nThresh);
@@ -46,40 +49,50 @@ tiledlayout(2,4)
 
 for iSearch = 1:length(senseToTest)
 
-
+    % Set search sensitivity.
     parameters.searchSense = zeros(nSubj,1) + senseToTest(iSearch);
 
+    % Set threshold parameters.
     for iThresh = 1:length(threshToTest)
         parameters.thresh = zeros(nSubj,1) + threshToTest(iThresh);
 
+        % This function adapts the function call for easier parallel use
+        % with slurm.
+        [choice, RT, allFix] = switchModelCall(settings,parameters,attValues, nTrials, nSubj, model);
 
-
-        % This function switches the model call based on if you are using slurm or
-% not (model is the same)
-        [choice, RT, allFix] = switchModelCall(settings,parameters,attValues, nTrials, nSubj, 1);
-
-        
-        for iSub = 1:nSubj 
+        % For each subject, find the least and most important attribute
+        % based on the weights.
+        for iSub = 1:nSubj
             [~,mostImportant] = max(w(:,iSub));
             [~, leastImportant] = min(w(:,iSub));
+
             for iTrial = 1:nTrials
                 nFix = sum(~isnan(allFix(:,iTrial,iSub)));
+
+                % Calculate the proportion of fixations on each attribute.
                 for iAttr = 1:m
                     propFixAttr(iAttr,iTrial,iSub) =  sum(ismember(allFix(:,iTrial,iSub),matrixOAP(:,iAttr))) / nFix;
                 end
 
+                % And on each option.
                 for iOpt = 1:n
                     propFixOpt(iOpt,iTrial,iSub) = sum(ismember(allFix(:,iTrial,iSub),matrixOAP(iOpt,:))) /nFix;
                 end
 
+                % Calculate proportion of fixations on most vs least
+                % important attrbute.
                 pMostImp(iTrial,iSub) = propFixAttr(mostImportant,iTrial,iSub);
                 pLeastImp(iTrial,iSub) = propFixAttr(leastImportant,iTrial,iSub);
             end
 
+            % Find the variance in the proportion of fixations on each
+            % option/attrbute.
             tempAttr(:,iSub) = var(propFixAttr(:,:,iSub),1);
             tempOpt(:,iSub) = var(propFixOpt(:,:,iSub),1);
         end
 
+
+        % Averaging
         pFixMax(:,iThresh) = mean(pMostImp);
         pFixMin(:,iThresh) = mean(pLeastImp);
 
@@ -88,7 +101,7 @@ for iSearch = 1:length(senseToTest)
         optVar(:,iThresh) = mean(tempOpt);
 
 
-
+        % Calculate the Payne Index
         [~, PayneIndex] = H7(allFix,nSubj,nTrials,matrixOAP,w);
         PI(:,iThresh) = PayneIndex;
         CC(:,iThresh) = getChoiceConsistency(dat,choice);
@@ -103,49 +116,49 @@ for iSearch = 1:length(senseToTest)
 
 
 
-%% Payne Index
-nexttile(1)
-plot(threshToTest, mean(PI));
-hold on
+    %% Payne Index
+    nexttile(1)
+    plot(threshToTest, mean(PI));
+    hold on
 
 
-%% Attribute Variance
-nexttile(2)
-plot(threshToTest,mean(attrVar));
-hold on
+    %% Attribute Variance
+    nexttile(2)
+    plot(threshToTest,mean(attrVar));
+    hold on
 
 
-%% Options Variance
-nexttile(3)
-plot(threshToTest,mean(optVar));
-hold on
+    %% Options Variance
+    nexttile(3)
+    plot(threshToTest,mean(optVar));
+    hold on
 
-%% Time Spent on Most Important Attribute
-nexttile(4)
-plot(threshToTest, mean(pFixMax));
-hold on
+    %% Time Spent on Most Important Attribute
+    nexttile(4)
+    plot(threshToTest, mean(pFixMax));
+    hold on
 
-%% Choice Consistency
-nexttile(5)
-plot(threshToTest,mean(CC))
-hold on
+    %% Choice Consistency
+    nexttile(5)
+    plot(threshToTest,mean(CC))
+    hold on
 
-%% Number of Fixations
-nexttile(6)
-plot(threshToTest,mean(RTs))
-hold on
+    %% Number of Fixations
+    nexttile(6)
+    plot(threshToTest,mean(RTs))
+    hold on
 
-%% Reward Rate
-nexttile(7)
-plot(threshToTest,mean(RR))
-hold on
+    %% Reward Rate
+    nexttile(7)
+    plot(threshToTest,mean(RR))
+    hold on
 
-drawnow
+    drawnow
 end
 
 savefig(gcf,'WeightsAttention')
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%% Plotting: 
+%% Plotting:
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Define Color Map
 startColor = [194 218 184]/255;
@@ -164,7 +177,7 @@ for iPlot = 1:length(labels)
     ylabel(labels{iPlot});
     xlabel('Threshold \theta');
     xlim([-.05 .25]);
-        set(gca,'TitleHorizontalAlignment','left')
+    set(gca,'TitleHorizontalAlignment','left')
 
     h = flip(findobj(gca,'Type','Line'));
     for k = 1:length(h)

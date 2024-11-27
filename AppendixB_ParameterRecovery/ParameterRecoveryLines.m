@@ -1,5 +1,11 @@
 function ParameterRecoveryLines()
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% This function was used in the Appendix B to assess parameter recovery.
+% We took the best fitting model parameters and simulated data for each
+% participant from the model. The resulting data is saved in
+% 'studyData_dataset_pRecov'. We then refit the model to this data 100
+% times and here assess how well the original parameters were recovered. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 paramNames= {'Sampling Noise \sigma',	'Threshold Increase \Delta',	'Search Sensitivity \alpha'};
 datasets = {'Phone','Hotel'};

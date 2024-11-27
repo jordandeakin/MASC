@@ -1,35 +1,16 @@
-function Extra_HicksLaw()
-%%
+function AQE_HicksLaw()
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function was used in the 'Accounting for Qualitative Effects in
 % Previous Work' section. It calculates number of fixations (and
 % approximated RT) across varying N. It plots this along with the function
-% predicted by Hick's Law. 
-%%
+% predicted by Hick's Law.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% Colormap
+%% Settings
 clf
 startColor = [194 218 184]/255;
 HL = @(a,b,n) a + b * log2(n-1);
-
-
 plotApprox = 0; % If plotApprox == 1, function will plot approximate RT by sampling from an exGauss
-
-
-mu = 139.5530;
-sigma = 63.1433;
-tau = 91.0133;
-
-% Simulate with 20 options and then add options...
-nSubj = 100;
-nTrials = 200;
-maxOpt = 20;
-[dat,parameters] = MASC_Simulate(nSubj,nTrials,maxOpt,1);
-parameters.sn(parameters.sn < 0) = -parameters.sn(parameters.sn<0);
-parameters.sn = zeros(nSubj,1) + 1;
-parameters.threshInc =  zeros(nSubj,1) + .01; % Longer RTs.
-parameters.searchSense = zeros(nSubj,1) + 5;
-
-
 options = 2:1:maxOpt;
 approxRT = deal(zeros(length(options),1));
 settings.m = 1;
@@ -37,14 +18,33 @@ settings.maxSteps = 100;
 [mRT, mApproxRT] = deal(nan(length(options),1));
 
 
+% These are parameters estimated from fitting an Ex-Gauss to the distribution of fixation durations
+% of participants in the phone and hotel datasets.
+mu = 139.5530;
+sigma = 63.1433;
+tau = 91.0133;
+
+% Simulate 20 options and then add options incrementally
+nSubj = 100;
+nTrials = 200;
+maxOpt = 20;
+[dat,parameters] = MASC_Simulate(nSubj,nTrials,maxOpt,1);
+
+% Set parameters.
+parameters.sn = zeros(nSubj,1) + 1;
+parameters.threshInc =  zeros(nSubj,1) + .01; % Longer RTs.
+parameters.searchSense = zeros(nSubj,1) + 5;
+
+
+
+
+
 for iOpt = 1:length(options)
     settings.n = options(iOpt);
     attValues = dat.attValues(1:options(iOpt),:,:,:);
 
     %% Simulate Model
-        % This function switches the model call based on if you are using slurm or
-% not (model is the same)
-        [~, RT, ~] = switchModelCall(settings,parameters,attValues, nTrials, nSubj, 1);
+    [~, RT, ~] = switchModelCall(settings,parameters,attValues, nTrials, nSubj, 1);
 
 
 
@@ -90,4 +90,3 @@ for iOpt = 1:length(options)
     end
     legend('Number of Fixations','Hick''s Law: a + b * log_{2}(N-1)')
 end
-   

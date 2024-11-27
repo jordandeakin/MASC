@@ -1,11 +1,11 @@
-function Extra_WeightsAttention()
-%%
+function AQE_WeightsAttention()
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % This function was used in the 'Accounting for Qualitative Effects in
 % Previous Work' section. It computes the relationship between attribute
 % weights and attention given varying weight differences. It also plots the
 % development of fixations over time when weight difference = 0.5 - as
 % (roughly) reported in March & Gluth, 2024 & X. Yang et al., 2024).
-
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Range of noise levels to test.
 noiseToTest = 0.5:.5:3;
@@ -23,8 +23,8 @@ nexttile(2)
 plot([-1 1],[-1 1],'-','Color',[.7 .7 .7],'HandleVisibility','off');
 hold on
 
-% Load saved attribute weights & set fixed parameters
-f = load('Extra_WeightsAttention_Dat');
+% Load saved attribute weights for replicability & set fixed parameters 
+f = load('AQE_WeightsAttention_Dat');
 [n,m,nTrials,nSubj] = size(f.attValues);
 settings.m = m; settings.n = m; settings.maxSteps = 100;
 attValues = f.attValues;
@@ -69,7 +69,6 @@ for iT = 1:length(noiseToTest)
         end
 
         pAttM = squeeze(mean(pAtt, 1))';
-
         pAtt1 = pAttM(:,1) + pAttM(:,2);
         pAtt2 = pAttM(:,3) + pAttM(:,4);
 
