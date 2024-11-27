@@ -24,8 +24,8 @@ This repository contains the model code as well as simulation results and data p
 ##### Manuscript Folder
 ###### This folder contains data and simulations used in the manuscript. 
 - **runHypothesisTests_Data.m**: Analysis of Hypotheses 1-7 in the manuscript. 
-- HypotehsisTests_Data.mat**: This is a structure array of tables containing the results of the statistical analysis of Hypotheses 1-7 presented in the manuscript. It is the output of runHypothesisTests_Data.
-- **studyData* files**: These files contain the data from the Phone & Hotel choice tasks presented in the manuscript.
+- **HypotehsisTests_Data.mat**: This is a structure array of tables containing the results of the statistical analysis of Hypotheses 1-7 presented in the manuscript. It is the output of runHypothesisTests_Data.
+- **studyData files**: These files contain the data from the Phone & Hotel choice tasks presented in the manuscript.
 - **./Workspaces**: This contains matlab workspaces containing the fitting results of each of the 10 variants (search rule) of MASC fitted to the the Phone & Hotel datasets.
 - **Search Rule Simulations**: For each search rule there is a .mat file which contains the significance tests for 1000 simulations (Table 1 in the manuscript). The 7 test fields correspond to the 7 hypotheses. 1 denotes an effect was significant and 0 otherwise. 
 - **./AppendixB_ParameterRecovery**: Parameter recovery analysis scripts and the recovered parameters presented in the manuscript. 
