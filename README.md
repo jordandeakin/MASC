@@ -10,13 +10,13 @@ This repository contains the model code as well as simulation results and data p
 
 
 ##### Main Model Functions
-- **MASC_Model - Contains the main model code for MASC.
+- **MASC_Model** - Contains the main model code for MASC.
 - **MASC_ModelA** - Contains the main model code for the absolute threshold variant of MASC.
 - **MASC_Create** - Creates a set of options and parameters.
 - **MASC_FitStudy** - Grid search used in manuscript to find best fitting parameters. 
 - **MASC_Initialize** - Initialises a simulation of MASC either with real options and parameters (from data) or generates them. 
 - **MASC_Example** - An example of how to simulate the model and the inputs the model expects. 
-- ./Search_Rules** - This contains the different search rules that can be used with MASC. See MASC_Model for a description. 	MASC_SearchRule_myopic is MASC's default myopic search rule. 
+- **./Search_Rules** - This contains the different search rules that can be used with MASC. See MASC_Model for a description. 	MASC_SearchRule_myopic is MASC's default myopic search rule. 
 - **./Manuscript** - This contains data and simulation codes used for the MASC manuscript. 
 
 
