@@ -23,7 +23,7 @@ nexttile(2)
 plot([-1 1],[-1 1],'-','Color',[.7 .7 .7],'HandleVisibility','off');
 hold on
 
-% Load saved attribute weights for replicability & set fixed parameters 
+% Load saved attribute weights for reproducibility & set fixed parameters 
 f = load('AQE_WeightsAttention_Dat');
 [n,m,nTrials,nSubj] = size(f.attValues);
 settings.m = m; settings.n = m; settings.maxSteps = 100;

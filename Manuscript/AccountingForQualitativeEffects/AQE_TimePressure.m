@@ -19,7 +19,7 @@ nSubj = 100; nTrials = 200; % 100 simulated participants, 200 trials each.
 matrixOAP = reshape(1:n*m,n,m);
 model = 1; % Which search rule to use. 1 = default myopic search rule. See MASC_Model for details of other search rules.
 
-%% Load in existing dataset for replicability or create one if it doesn't exist.
+%% Load in existing dataset for reproducibility or create one if it doesn't exist.
 if exist('AQE_TimePressure_Dat.mat','file') == 2
     f = load('AQE_TimePressure_Dat.mat');
     dat = f.dat; parameters = f.parameters;
