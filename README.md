@@ -6,7 +6,7 @@ MASC is a hierarchical Bayesian model of adaptive information search for decisio
 
 ![ds](MASC_Diagram.png)
 
-This repository contains the model code as well as simulation results and data presented in the paper X. 
+This repository contains the model code as well as simulation results and data presented in https://osf.io/preprints/psyarxiv/3qzak. 
 
 
 ##### Main Model Functions
