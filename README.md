@@ -2,6 +2,8 @@
 # <span style="color:green">MASC</span>: Multi-Attribute Search & Choice Model
 #### *Sebastian Gluth, Jordan Deakin, Jörg Rieskamp*
 
+Note: MASC is now also available in R thanks to the brilliant Kianté Fernandez! https://github.com/kiante-fernandez/masc
+
 MASC is a hierarchical Bayesian model of adaptive information search for decisions between options characterised by multiple attributes. The model predicts the allocation of attention over time, the termination of search and the choice made. 
 
 ![ds](MASC_Diagram.png)
